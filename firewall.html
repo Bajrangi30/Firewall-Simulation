@@ -1,40 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Firewall Simulation Model - Bajrangi Yadav</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firewall Simulation Dashboard</title>
+
 <style>
-  body{background:#0b0f15;color:#e6eef3;font-family:Arial;margin:0}
-  header{background:#11161b;padding:28px 16px;text-align:center;border-bottom:1px solid #222}
-  h1{color:#58a6ff;margin:0}
-  .container{width:92%;max-width:1000px;margin:28px auto}
-  .card{background:#0f1720;border:1px solid #1f2937;padding:18px;border-radius:10px;margin-bottom:16px}
-  a.btn{display:inline-block;padding:10px 16px;background:#16a34a;color:#fff;border-radius:8px;text-decoration:none}
+    body{
+        margin:0; font-family: Arial, sans-serif; background:#0d1117; color:white;
+        display:flex;
+    }
+    .sidebar{
+        width:260px; background:#161b22; height:100vh; padding:20px;
+        position:fixed; left:0; top:0;
+        border-right:1px solid #30363d;
+    }
+    .sidebar h2{
+        text-align:center; color:#58a6ff;
+    }
+    .sidebar a{
+        display:block; text-decoration:none; padding:12px;
+        margin:10px 0; color:#c9d1d9; background:#21262d;
+        border-radius:8px;
+    }
+    .sidebar a:hover{
+        background:#30363d;
+    }
+
+    .main{
+        margin-left:280px; padding:20px; width:100%;
+    }
+    .card{
+        background:#161b22; padding:20px; border-radius:10px;
+        margin-bottom:20px; border:1px solid #30363d;
+    }
+    .card h3{
+        color:#58a6ff;
+    }
+    textarea, input{
+        width:100%; padding:10px; border-radius:6px; border:none;
+        background:#0d1117; color:white; border:1px solid #30363d;
+    }
+    button{
+        padding:10px 15px; background:#238636; border:none;
+        color:white; border-radius:6px; cursor:pointer; margin-top:10px;
+    }
+    button:hover{
+        background:#2ea043;
+    }
 </style>
 </head>
 <body>
-<header>
-  <h1>Network Firewall Simulation Model</h1>
-  <p>By <strong>Bajrangi Yadav</strong> — B.Tech CSE (Cyber Security)</p>
-</header>
-<div class="container">
-  <div class="card">
-    <h2>Project Overview</h2>
-    <p>An advanced Python GUI firewall simulator with rule editing, packet animation, live logs, traffic charts, attack simulations, and export features.</p>
-  </div>
-  <div class="card">
-    <h2>Download</h2>
-    <a class="btn" href="#" target="_blank">View on GitHub</a>
-    <a class="btn" href="GUI.exe" style="margin-left:10px" target="_blank">Download EXE</a>
-  </div>
-  <div class="card">
-    <h2>How to run</h2>
-    <ol>
-      <li>Open project folder</li>
-      <li>Double-click <code>setup.bat</code> or run <code>python GUI.py</code></li>
-    </ol>
-  </div>
+
+<div class="sidebar">
+    <h2>Firewall Dashboard</h2>
+    <a href="#traffic">Live Traffic Monitor</a>
+    <a href="#rules">Firewall Rules</a>
+    <a href="#logs">Logs Viewer</a>
+    <a href="#status">System Status</a>
 </div>
+
+<div class="main">
+
+    <!-- LIVE TRAFFIC -->
+    <div class="card" id="traffic">
+        <h3>🔴 Live Traffic Monitor</h3>
+        <p>Shows incoming & outgoing packets in real-time (simulation)</p>
+        <div id="trafficBox" style="background:#0d1117;height:150px;overflow:auto;padding:10px;border-radius:6px;border:1px solid #30363d;">
+        </div>
+        <button onclick="simulateTraffic()">Start Simulation</button>
+    </div>
+
+    <!-- FIREWALL RULES -->
+    <div class="card" id="rules">
+        <h3>🛡 Firewall Rules</h3>
+        <textarea id="ruleInput" placeholder="Enter rule (e.g., block port 80)"></textarea>
+        <button onclick="addRule()">Add Rule</button>
+        <pre id="ruleList"></pre>
+    </div>
+
+    <!-- LOGS VIEWER -->
+    <div class="card" id="logs">
+        <h3>📜 Firewall Logs</h3>
+        <button onclick="loadLogs()">Load Logs</button>
+        <pre id="logOutput"></pre>
+    </div>
+
+    <!-- SYSTEM STATUS -->
+    <div class="card" id="status">
+        <h3>📊 System Status</h3>
+        <p>Firewall Status: <b style="color:#2ea043">ACTIVE</b></p>
+        <p>Packets Scanned: <span id="scanCount">0</span></p>
+    </div>
+
+</div>
+
+<script>
+let count = 0;
+
+// Live traffic simulation
+function simulateTraffic(){
+    let traffic = document.getElementById("trafficBox");
+    setInterval(()=>{
+        count++;
+        traffic.innerHTML += "Packet " + count + " → Checked<br>";
+        document.getElementById("scanCount").innerText = count;
+        traffic.scrollTop = traffic.scrollHeight;
+    }, 800);
+}
+
+// Add firewall rule
+function addRule(){
+    let rule = document.getElementById("ruleInput").value;
+    document.getElementById("ruleList").innerHTML += "✔ " + rule + "\n";
+    document.getElementById("ruleInput").value = "";
+}
+
+// Load logs (dummy demo)
+function loadLogs(){
+    document.getElementById("logOutput").innerText = 
+        "2025-12-03 | Allowed | 192.168.1.5 → 80\n" +
+        "2025-12-03 | Blocked | 10.0.0.7 → 22\n";
+}
+</script>
+
 </body>
 </html>
